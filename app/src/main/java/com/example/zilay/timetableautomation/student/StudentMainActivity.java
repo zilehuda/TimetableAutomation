@@ -2,8 +2,6 @@ package com.example.zilay.timetableautomation.student;
 
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.zilay.timetableautomation.R;
+import com.example.zilay.timetableautomation.adaptars.ViewPagerAdapter;
 
 public class StudentMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
