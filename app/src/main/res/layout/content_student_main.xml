@@ -9,18 +9,7 @@
     tools:context="com.example.zilay.timetableautomation.student.StudentMainActivity"
     tools:showIn="@layout/app_bar_student_main">
 
-   <Button
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="click me"
-       android:onClick="ClickMe"/>
 
-    <RelativeLayout
-        android:background="@color/colorAccent"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/Fragment_one_main">
-    </RelativeLayout>
     <android.support.design.widget.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"

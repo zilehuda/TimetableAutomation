@@ -24,11 +24,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         switch (position)
         {
             case 0:
-                Monday monday = new Monday();
-                return monday;
-            case 1:
                 Tuesday tuesday = new Tuesday();
                 return tuesday;
+            case 1:
+                Monday monday = new Monday();
+                return monday;
             default:
                 return null;
         }

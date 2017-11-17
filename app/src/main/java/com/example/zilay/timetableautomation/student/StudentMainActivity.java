@@ -15,7 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.zilay.timetableautomation.DatabaseHelper;
 import com.example.zilay.timetableautomation.R;
 import com.example.zilay.timetableautomation.adaptars.ViewPagerAdapter;
 
@@ -23,8 +25,9 @@ public class StudentMainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ViewPager viewPager;
+    DatabaseHelper dbhelper;
     private TabLayout tabLayout;
-    private String[] pageTitle = {"Fragment 1", "Fragment 2"};
+    private String[] pageTitle = {"Courses List", "Monday"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,18 @@ public class StudentMainActivity extends AppCompatActivity
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        this.deleteDatabase("timetable.db");
+        dbhelper = new DatabaseHelper(this);
+        dbhelper.insertData("HCI","mon","s2","F","f","2:00","3");
+        dbhelper.insertData("SMD","mon","s2","GR-2","f","3:00","3");
+        dbhelper.insertData("PIT","mon","s2","E","f","1:00","3");
+        dbhelper.insertData("IRTM","mon","s2","GR-1","f","9:00","3");
+        dbhelper.insertData("IRTM","mon","s2","GR-1","f","8:00","3");
+        dbhelper.insertData("Dscien.","mon","s2","F","f","11:00","3");
+        if(dbhelper.getTotalRows()!=0)
+            Toast.makeText(this,"empty",Toast.LENGTH_LONG).show();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -143,11 +158,4 @@ public class StudentMainActivity extends AppCompatActivity
         return true;
     }
 
-    public void ClickMe(View view) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        Monday f2 = new Monday();
-        ft.add(R.id.Fragment_one_main,f2);
-        ft.commit();
-    }
 }
