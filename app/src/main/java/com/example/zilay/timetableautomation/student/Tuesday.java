@@ -18,6 +18,10 @@ import com.example.zilay.timetableautomation.R;
 import com.example.zilay.timetableautomation.adaptars.RecycleViewAdaptar;
 import com.example.zilay.timetableautomation.adaptars.RetrofitAdaptar;
 import com.example.zilay.timetableautomation.models.Courses;
+import com.google.gson.JsonObject;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +54,16 @@ public class Tuesday extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        JSONObject timetableObject = new JSONObject();
+
+
+        JsonObject obj = new JsonObject();
+        obj.addProperty("code","CL101");
+
+
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
-        Call<List<Courses>> call = apiInterface.getCourses();
+        Call<List<Courses>> call = apiInterface.getCoursesPost(obj);
 
         call.enqueue(new Callback<List<Courses>>() {
             @Override

@@ -53,6 +53,7 @@ public class Monday extends Fragment {
 
 
 
+
         adapter = new RecycleViewAdaptar(timetableList,getContext());
         recyclerView.setAdapter(adapter);
 

@@ -32,12 +32,13 @@
                 android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:id="@+id/tilabatch"
             android:layout_height="wrap_content">
 
             <AutoCompleteTextView
-                android:id="@+id/tvbatch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_batch"
@@ -49,6 +50,7 @@
         <Button
             android:layout_gravity="center"
             android:textColor="#FFFF"
+            android:onClick="GetCourses"
             android:background="@color/colorButton"
             android:layout_width="match_parent"
             android:layout_height="70dp"

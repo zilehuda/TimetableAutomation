@@ -36,18 +36,18 @@ public class StudentMainActivity extends AppCompatActivity
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        this.deleteDatabase("timetable.db");
-        dbhelper = new DatabaseHelper(this);
-        dbhelper.insertData("HCI","mon","s2","F","f","2:00","3");
-        dbhelper.insertData("SMD","mon","s2","GR-2","f","3:00","3");
-        dbhelper.insertData("PIT","mon","s2","E","f","1:00","3");
-        dbhelper.insertData("IRTM","mon","s2","GR-1","f","9:00","3");
-        dbhelper.insertData("IRTM","mon","s2","GR-1","f","8:00","3");
-        dbhelper.insertData("Dscien.","mon","s2","F","f","11:00","3");
-        if(dbhelper.getTotalRows()!=0)
-            Toast.makeText(this,"empty",Toast.LENGTH_LONG).show();
+//
+//
+//        this.deleteDatabase("timetable.db");
+//        dbhelper = new DatabaseHelper(this);
+//        dbhelper.insertData("HCI","mon","s2","F","f","2:00","3");
+//        dbhelper.insertData("SMD","mon","s2","GR-2","f","3:00","3");
+//        dbhelper.insertData("PIT","mon","s2","E","f","1:00","3");
+//        dbhelper.insertData("IRTM","mon","s2","GR-1","f","9:00","3");
+//        dbhelper.insertData("IRTM","mon","s2","GR-1","f","8:00","3");
+//        dbhelper.insertData("Dscien.","mon","s2","F","f","11:00","3");
+//        if(dbhelper.getTotalRows()!=0)
+//            Toast.makeText(this,"empty",Toast.LENGTH_LONG).show();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

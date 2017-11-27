@@ -10,20 +10,25 @@
 
     <include layout="@layout/student_header" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="236dp">
+
+        <ListView
+            android:id="@+id/lvcs"
+            android:layout_width="match_parent"
+            android:layout_height="350dp">
 
         </ListView>
 
+
     <Button
-        android:layout_gravity="center"
-        android:textColor="#FFFF"
-        android:background="@color/colorButton"
+        android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:textSize="25sp"
-        android:text="SUBMIT"/>
+        android:layout_gravity="center|bottom"
+        android:background="@color/colorButton"
+        android:onClick="GetTimetable"
+        android:text="SUBMIT"
+        android:textColor="#FFFF"
+        android:textSize="25sp" />
 
 
 </LinearLayout>

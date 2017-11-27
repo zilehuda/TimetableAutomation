@@ -19,17 +19,20 @@
 
         </activity>
         <activity android:name=".SelectionActivity" />
-        <activity android:name=".student.StudentRegisterActivity" />
-        <activity android:name=".student.StudentCourseSelectionActivity" />
-        <activity
-            android:name=".student.StudentMainActivity"
-            android:label="@string/title_activity_student_main"
-            android:theme="@style/AppTheme">
+        <activity android:name=".student.StudentRegisterActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".student.StudentCourseSelectionActivity">
+        </activity>
+        <activity
+            android:name=".student.StudentMainActivity"
+            android:label="@string/title_activity_student_main"
+            android:theme="@style/AppTheme">
+
         </activity>
     </application>
 
