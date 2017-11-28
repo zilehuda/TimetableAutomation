@@ -20,6 +20,8 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,19 +44,14 @@ public class StudentRegisterActivity extends AppCompatActivity {
     public void GetCourses(View view)  {
 
         String bstring = batch.getEditText().getText().toString();
-        Toast.makeText(getApplicationContext(),bstring,Toast.LENGTH_LONG).show();
         getBatchCoursesFromServer(bstring);
-
-        Intent intent = new Intent(this,StudentCourseSelectionActivity.class);
-        //intent.putExtra("batch",batch.getEditText().toString().toString());
-        //startActivity(intent);
-
     }
 
     public void getBatchCoursesFromServer(String bstring)
     {
         final JsonObject jsonOjbect = new JsonObject();
         jsonOjbect.addProperty("batch", bstring);
+        CoursesList = new ArrayList<>();
 
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<Courses>> call = apiInterface.getBatchCourses(jsonOjbect);
@@ -62,12 +59,8 @@ public class StudentRegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Courses>> call, Response<List<Courses>> response) {
                 CoursesList = response.body();
-                Toast.makeText(getApplicationContext(),CoursesList.get(0).getCode(),Toast.LENGTH_LONG).show();
                 List<String> section = CoursesList.get(0).getSection();
-                for (int i = 0 ; i < section.size();i++)
-                {
-                    Log.d("section",section.get(i));
-                }
+                ChangeActivity(CoursesList);
             }
 
             @Override
@@ -75,6 +68,16 @@ public class StudentRegisterActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void ChangeActivity(List<Courses> CoursesList)
+    {
+        Intent intent = new Intent(this,StudentCourseSelectionActivity.class);
+        Bundle args = new Bundle();
+        args.putSerializable("CoursesList",(ArrayList<Courses>)CoursesList);
+        intent.putExtra("BUNDLE",args);
+        //intent.putExtra("data",  CoursesList);
+        startActivity(intent);
     }
 
 

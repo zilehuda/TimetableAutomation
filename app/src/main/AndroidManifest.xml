@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".student.StudentCourseSelectionActivity">
+
         </activity>
         <activity
             android:name=".student.StudentMainActivity"
