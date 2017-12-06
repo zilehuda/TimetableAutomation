@@ -1,6 +1,8 @@
 package com.example.zilay.timetableautomation.student;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.TabLayout;
@@ -30,10 +32,15 @@ public class StudentMainActivity extends AppCompatActivity
     private String[] pageTitle = { "Mon","Tues","wed","Thurs","Fri"};
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
-        //this.deleteDatabase("timetable.db");
+        this.deleteDatabase("timetable.db");
 
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -99,7 +106,6 @@ public class StudentMainActivity extends AppCompatActivity
 
 
 
-
     }
 
     @Override
@@ -109,6 +115,12 @@ public class StudentMainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+            startActivity(intent);
+            finish();
+            System.exit(0);
         }
     }
 

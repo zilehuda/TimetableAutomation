@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -61,7 +62,6 @@ StudentCourseSelectionActivity extends AppCompatActivity {
     private List<String> CoursesShort;
     private String fruits[] = {"apple","banana","mango"};
     boolean[] checkitem;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +74,9 @@ StudentCourseSelectionActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("BUNDLE");
         CoursesList = (ArrayList<Courses>) bundle.getSerializable("CoursesList");
+
+
+
         //Log.d("ar",CoursesList.get(0).getCode());
         GetCourseShort(CoursesList);
         GetCourseSection(CoursesList);
@@ -166,25 +169,29 @@ StudentCourseSelectionActivity extends AppCompatActivity {
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<Timetable>> call = apiInterface.getTimetable(timetableObject);
         // Set up progress before cal;
+        final ProgressDialog dialog = ProgressDialog.show(StudentCourseSelectionActivity.this, "", "Loading...",
+                true);
+        dialog.show();
 
-
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                dialog.dismiss();
+            }
+        }, 3000); // 3000 milliseconds delay
         call.enqueue(new Callback<List<Timetable>>() {
             @Override
             public void onResponse(Call<List<Timetable>> call, Response<List<Timetable>> response) {
                 timetableslist = response.body();
                 if (response.isSuccessful()) {
+                    SharedPreferences sp = getSharedPreferences("login",MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putBoolean("isLoginKey",true);
+                    editor.apply();
                     SaveOnDb(timetableslist);
-                    final ProgressDialog dialog = ProgressDialog.show(StudentCourseSelectionActivity.this, "", "Loading...",
-                            true);
-                    dialog.show();
 
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            dialog.dismiss();
-                        }
-                    }, 3000); // 3000 milliseconds delay
                      Intent intent = new Intent(StudentCourseSelectionActivity.this,StudentMainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
 
                 }
@@ -201,7 +208,6 @@ StudentCourseSelectionActivity extends AppCompatActivity {
 
 
 
-        Toast.makeText(this, i + "", Toast.LENGTH_SHORT).show();
     }
 
     public void SaveOnDb(List<Timetable> timetableslist)

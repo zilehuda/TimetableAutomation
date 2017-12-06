@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -20,39 +19,40 @@
         android:paddingTop="6dp">
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/tvrollnumber">
 
             <AutoCompleteTextView
-                android:id="@+id/tvrollnumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_id"
-                android:inputType="textEmailAddress"
+                android:inputType="number"
+                android:maxLength="4"
                 android:maxLines="1"
                 android:singleLine="true" />
 
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:id="@+id/tilabatch"
-            android:layout_height="wrap_content">
 
-            <AutoCompleteTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/prompt_batch"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:singleLine="true" />
 
-        </android.support.design.widget.TextInputLayout>
+        <Button
+            android:id="@+id/picker"
+            android:layout_gravity="center"
+            android:onClick="getPicker"
+            android:textColor="#FFFF"
+            android:background="@color/colorButton"
+            android:layout_width="80dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:text="BATCH"/>
+
         <Button
             android:layout_gravity="center"
             android:textColor="#FFFF"
             android:onClick="GetCourses"
             android:background="@color/colorButton"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="70dp"
             android:textSize="25sp"
             android:text="NEXT"/>
