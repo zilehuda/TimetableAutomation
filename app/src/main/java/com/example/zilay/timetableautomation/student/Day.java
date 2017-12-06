@@ -22,15 +22,23 @@ import com.example.zilay.timetableautomation.models.Timetable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Monday extends Fragment {
+public class Day extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<Timetable> timetableList;
     private List<Courses> coursesList;
+    private String day;
     DatabaseHelper dbhelper;
-    public Monday()
+    public Day()
     {}
+
+
+
+    public void setDay(String day)
+    {
+        this.day = day;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,11 +57,9 @@ public class Monday extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         dbhelper = new DatabaseHelper(getContext());
         timetableList = new ArrayList<>();
-        timetableList = dbhelper.getAllContacts();
 
-
-
-
+        //timetableList = dbhelper.getAllContacts();
+        timetableList = dbhelper.getDayTimetable(day);
         adapter = new RecycleViewAdaptar(timetableList,getContext());
         recyclerView.setAdapter(adapter);
 

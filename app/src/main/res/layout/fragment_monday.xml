@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
-    tools:context="com.example.zilay.timetableautomation.student.Monday">
+    tools:context="com.example.zilay.timetableautomation.student.Day">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvTimeTable"

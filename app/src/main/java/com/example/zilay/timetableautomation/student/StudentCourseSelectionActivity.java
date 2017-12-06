@@ -1,9 +1,14 @@
 package com.example.zilay.timetableautomation.student;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.DialogPreference;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +22,7 @@ import android.widget.Toast;
 import com.example.zilay.timetableautomation.ApiClient;
 import com.example.zilay.timetableautomation.ApiInterface;
 import com.example.zilay.timetableautomation.DatabaseHelper;
+import com.example.zilay.timetableautomation.MainActivity;
 import com.example.zilay.timetableautomation.R;
 import com.example.zilay.timetableautomation.models.Courses;
 import com.example.zilay.timetableautomation.models.Timetable;
@@ -26,11 +32,20 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import static android.R.id.progress;
+import static android.graphics.Color.GREEN;
 
 public class
 StudentCourseSelectionActivity extends AppCompatActivity {
@@ -39,6 +54,8 @@ StudentCourseSelectionActivity extends AppCompatActivity {
     private List<Timetable> timetableslist;
     private DatabaseHelper dbhelper;
     private List<Courses>CoursesList;
+    private List<Integer> CodeIndex;
+    private ArrayList<Integer> SectionIndex;
     private List<List<String>> CoursesSection;
     private String list[] = {"item 1","item 2","item 2","item 2","item 2","item 2","item 2","item 2"};
     private List<String> CoursesShort;
@@ -52,6 +69,8 @@ StudentCourseSelectionActivity extends AppCompatActivity {
         CoursesList = new ArrayList<>();
         CoursesShort = new ArrayList<>();
         CoursesSection = new ArrayList<>();
+        CodeIndex = new ArrayList<>();
+        SectionIndex = new ArrayList<>();
         Intent intent = getIntent();
         Bundle bundle = intent.getBundleExtra("BUNDLE");
         CoursesList = (ArrayList<Courses>) bundle.getSerializable("CoursesList");
@@ -64,10 +83,13 @@ StudentCourseSelectionActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.lvcs);
         listView.setAdapter(adapter);
         checkitem = new boolean[list.length];
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                //listView.getChildAt(position).setBackgroundColor(Color.BLUE);
                 String item  =listView.getItemAtPosition(position).toString();
                 List<String> section = new ArrayList<String>();
+
                 section = (ArrayList) CoursesSection.get(position);
                 AlertDialog.Builder mbuilder = new AlertDialog.Builder(StudentCourseSelectionActivity.this);
                 mbuilder.setTitle("Select Your Section");
@@ -76,7 +98,9 @@ StudentCourseSelectionActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 String s1 = ""+whichButton;
                                 int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
-                                Toast.makeText(StudentCourseSelectionActivity.this,fruits[selectedPosition],Toast.LENGTH_LONG).show();
+                                CodeIndex.add(position);
+                                SectionIndex.add(selectedPosition);
+                                //Toast.makeText(StudentCourseSelectionActivity.this,fruits[selectedPosition],Toast.LENGTH_LONG).show();
                             }
                         })
                         .show();
@@ -85,6 +109,7 @@ StudentCourseSelectionActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void GetCourseShort(List<Courses>CoursesList)
     {
@@ -99,36 +124,72 @@ StudentCourseSelectionActivity extends AppCompatActivity {
         {
             this.CoursesSection.add(CoursesList.get(i).getSection());
         }
+
+
     }
 
 
 
     public void GetTimetable(View view) {
 
-        String f_code = "CS422";
-        String section = "F";
+        String f_code ;
+        String section ;
 
-        getFromServer(f_code,section);
+        final JsonArray  timetableObject = new JsonArray ();
+        for(int i = 0 ;i<CodeIndex.size();i++)
+        {
+            final JsonObject timetableinfo = new JsonObject();
+            int pos = CodeIndex.get(i);
+            int spos = SectionIndex.get(i);
+            f_code = CoursesList.get(pos).getCode();
+            section = CoursesList.get(pos).getSection().get(spos);
+            timetableinfo.addProperty("f_code", f_code);
+            timetableinfo.addProperty("section",section);
+            timetableObject.add(timetableinfo);
+        }
+
+       // Log.d("s",timetableObject.get(timetableObject.size()-1).toString());
+        getFromServer(timetableObject);
+
+
+       // Intent intent = new Intent(this,StudentMainActivity.class);
+       //startActivity(intent);
+
+
 
 
     }
 
-    public void getFromServer(String f_code,String section)
-    {
-        final JsonObject timetableOjbect = new JsonObject();
-        timetableOjbect.addProperty("f_code", f_code);
-        timetableOjbect.addProperty("section",section);
+    public void getFromServer(JsonArray timetableObject) {
+
 
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<Timetable>> call = apiInterface.getTimetable(timetableOjbect);
+        Call<List<Timetable>> call = apiInterface.getTimetable(timetableObject);
+        // Set up progress before cal;
+
 
         call.enqueue(new Callback<List<Timetable>>() {
             @Override
             public void onResponse(Call<List<Timetable>> call, Response<List<Timetable>> response) {
-
                 timetableslist = response.body();
-                SaveOnDb(timetableslist);
-                Toast.makeText(getApplicationContext(),timetableslist.get(0).getCourse_short(),Toast.LENGTH_LONG).show();
+                if (response.isSuccessful()) {
+                    SaveOnDb(timetableslist);
+                    final ProgressDialog dialog = ProgressDialog.show(StudentCourseSelectionActivity.this, "", "Loading...",
+                            true);
+                    dialog.show();
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            dialog.dismiss();
+                        }
+                    }, 3000); // 3000 milliseconds delay
+                     Intent intent = new Intent(StudentCourseSelectionActivity.this,StudentMainActivity.class);
+                    startActivity(intent);
+
+                }
+                //Toast.makeText(getApplicationContext(),"D",Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),timetableslist.get(0).getTimetable().getSubject(),Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -136,6 +197,11 @@ StudentCourseSelectionActivity extends AppCompatActivity {
 
             }
         });
+        int i = 1;
+
+
+
+        Toast.makeText(this, i + "", Toast.LENGTH_SHORT).show();
     }
 
     public void SaveOnDb(List<Timetable> timetableslist)
@@ -153,8 +219,7 @@ StudentCourseSelectionActivity extends AppCompatActivity {
             dbhelper.insertData(course_short,day,slot,section,teacher_name,starttime,endtime);
         }
 
-        Intent intent = new Intent(this,StudentMainActivity.class);
-        startActivity(intent);
+
     }
 
 }

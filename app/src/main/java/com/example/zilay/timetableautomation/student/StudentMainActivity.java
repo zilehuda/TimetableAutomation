@@ -27,12 +27,14 @@ public class StudentMainActivity extends AppCompatActivity
     private ViewPager viewPager;
     DatabaseHelper dbhelper;
     private TabLayout tabLayout;
-    private String[] pageTitle = {"Courses List", "Monday"};
+    private String[] pageTitle = { "Mon","Tues","wed","Thurs","Fri"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_main);
+        //this.deleteDatabase("timetable.db");
+
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -58,12 +60,12 @@ public class StudentMainActivity extends AppCompatActivity
 
         //setting Tab layout (number of Tabs = number of ViewPager pages)
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 5; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(pageTitle[i]));
         }
 
         //set gravity for tab bar
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setTabGravity(TabLayout.MODE_SCROLLABLE);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -141,13 +143,6 @@ public class StudentMainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
             viewPager.setCurrentItem(0);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
